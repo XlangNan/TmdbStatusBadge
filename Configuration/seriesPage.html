@@ -1,0 +1,33 @@
+<div id="TmdbStatusBadgeSeriesPage" data-role="page" class="page type-interior pluginConfigurationPage" data-title="剧集状态管理" data-require="emby-input,emby-button,emby-select" data-controller="__plugin/tmdbstatusbadgeseriesjs">
+    <div data-role="content">
+        <div class="content-primary">
+            <div class="verticalSection">
+                <h2>剧集完结状态管理</h2>
+                <div class="fieldDescription">
+                    这里可以给某一部剧手动指定"完结"或"更新中"，覆盖插件自动判断的结果。
+                    一旦手动设置过，这部剧就不会再被自动扫描改动，除非你把它改回"自动判断"。
+                </div>
+            </div>
+
+            <div class="inputContainer">
+                <input is="emby-input" type="text" id="SeriesSearchBox" placeholder="搜索剧名…" />
+            </div>
+
+            <div id="SeriesListLoading" class="fieldDescription">正在加载…</div>
+            <div id="SeriesListEmpty" class="fieldDescription" style="display:none;">
+                列表是空的——可能库里还没有剧集，或者还没跑过一次扫描（先去"计划任务"跑一次「扫描剧集完结状态（TMDB）」）。
+            </div>
+
+            <table class="detailTable" id="SeriesTable" style="display:none; width:100%;">
+                <thead>
+                    <tr>
+                        <td>剧名</td>
+                        <td>自动判断结果</td>
+                        <td>手动设置</td>
+                    </tr>
+                </thead>
+                <tbody id="SeriesTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Emby Server 4.7.x/4.8.x 使用 net6.0 ABI；如果你的服务端版本不同，请对应调整 -->
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>TmdbStatusBadge</AssemblyName>
+    <RootNamespace>TmdbStatusBadge</RootNamespace>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!--
+      Emby 插件页面显示的版本号读取自 dll 的程序集版本。
+      每次发新版本给用户升级时，把这个号往上调一下（比如 1.0.1.0），
+      不然 Emby 会认为版本没变，插件目录/更新检测可能不触发。
+    -->
+    <Version>1.2.3.0</Version>
+    <AssemblyVersion>1.2.3.0</AssemblyVersion>
+    <FileVersion>1.2.3.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+      这两个 DLL 来自你的 Emby Server 安装目录（System 目录下），
+      本地编译时需要手动引用，不能从 NuGet 拉取。
+      Windows 典型路径: C:\Program Files\Emby-Server\system
+      Linux 典型路径:  /opt/emby-server/system  或 /usr/lib/emby-server/system
+      Docker 容器内路径: /config/../  实际请从容器里 docker cp 出来
+    -->
+    <Reference Include="MediaBrowser.Common">
+      <HintPath>lib/MediaBrowser.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MediaBrowser.Controller">
+      <HintPath>lib/MediaBrowser.Controller.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="MediaBrowser.Model">
+      <HintPath>lib/MediaBrowser.Model.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 角标现在用预先设计好的 PNG 素材叠加到海报上，
+         打包成嵌入资源，dll 本身就带着图，不用额外拷文件。
+         丝带样式是有方向性的，四个角落各自单独一张图（不做运行时镜像翻转，
+         镜像会把图里画好的文字也一起变成镜像/倒着的，之前踩过这个坑）。 -->
+    <EmbeddedResource Include="Configuration\configPage.html" />
+    <EmbeddedResource Include="Configuration\configPage.js" />
+    <EmbeddedResource Include="Configuration\seriesPage.html" />
+    <EmbeddedResource Include="Configuration\seriesPage.js" />
+    <EmbeddedResource Include="Assets\badge_ended_top_right.png" />
+    <EmbeddedResource Include="Assets\badge_ended_top_left.png" />
+    <EmbeddedResource Include="Assets\badge_ended_bottom_right.png" />
+    <EmbeddedResource Include="Assets\badge_ended_bottom_left.png" />
+    <EmbeddedResource Include="Assets\badge_ongoing_top_right.png" />
+    <EmbeddedResource Include="Assets\badge_ongoing_top_left.png" />
+    <EmbeddedResource Include="Assets\badge_ongoing_bottom_right.png" />
+    <EmbeddedResource Include="Assets\badge_ongoing_bottom_left.png" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,128 @@
+<div id="TmdbStatusBadgeConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-title="TMDB 完结状态角标" data-require="emby-input,emby-button,emby-checkbox,emby-select" data-controller="__plugin/tmdbstatusbadgejs">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="TmdbStatusBadgeConfigForm">
+                <div class="verticalSection">
+                    <h2>TMDB 完结状态角标 - 设置</h2>
+                </div>
+
+                <div class="inputContainer">
+                    <a is="emby-linkbutton" class="button-link" href="configurationpage?name=tmdbstatusbadgeseries">
+                        → 打开"剧集状态管理"（手动设置某部剧的完结/更新中状态）
+                    </a>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="Enabled" />
+                        <span>启用插件</span>
+                    </label>
+                </div>
+
+                <div class="inputContainer">
+                    <label for="TmdbApiKey">TMDB API Key (v3 auth)</label>
+                    <input is="emby-input" type="text" id="TmdbApiKey" />
+                    <div class="fieldDescription">
+                        在 themoviedb.org 账号设置 -&gt; API 里申请，免费。
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="EnableEventTrigger" />
+                        <span>新集入库后立即检测（不等定时任务）</span>
+                    </label>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="FullMetadataRefreshOnChange" />
+                        <span>状态变化时做完整元数据刷新（更彻底，但更吃资源）</span>
+                    </label>
+                    <div class="fieldDescription">
+                        关闭（默认）：状态变化只是轻量通知 Emby"图片变了"，大多数情况下网格列表/详情页会跟着实时刷新。<br/>
+                        打开：会真正触发一次"刷新元数据 + 替换图片"，Emby 自己各种尺寸的缓存图都会重新生成，
+                        效果最彻底，但会重新请求你配置的元数据源，比较吃资源，剧多的话不建议开。
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <label for="BadgePosition">角标位置</label>
+                    <select is="emby-select" id="BadgePosition">
+                        <option value="0">左上</option>
+                        <option value="1">右上</option>
+                        <option value="2">左下</option>
+                        <option value="3" selected>右下</option>
+                    </select>
+                </div>
+
+                <div class="inputContainer">
+                    <label for="BadgeScalePercent">角标宽度占海报宽度的百分比</label>
+                    <input is="emby-input" type="number" id="BadgeScalePercent" min="10" max="80" />
+                    <div class="fieldDescription">
+                        默认 26，数值越大角标越大。素材会按这个比例等比缩放。
+                    </div>
+                </div>
+
+                <div class="verticalSection" style="margin-top:1.5em;">
+                    <h3>自定义角标图片（可选）</h3>
+                    <div class="fieldDescription">
+                        不上传就用插件自带的丝带样式。上传自己的图后，插件会直接把整张图
+                        按"角标宽度占海报宽度的百分比"缩放贴到你选的那个角落——注意自己的图
+                        如果本身是斜着带方向的，插件不会帮你转方向，四个角落贴的都是原图，
+                        建议上传本身就不带方向性的图案（比如一个圆形印章、一个图标）最省心。
+                        建议图片体积不要太大（几百KB以内），过大的图会让配置文件变得很臃肿。
+                    </div>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="UseCustomEndedBadge" />
+                        <span>"完结"角标使用自定义图片</span>
+                    </label>
+                    <input type="file" id="CustomEndedBadgeFile" accept="image/png,image/webp" />
+                    <div class="fieldDescription" id="CustomEndedBadgeStatus">尚未上传</div>
+                    <button is="emby-button" type="button" id="ClearCustomEndedBadge" class="button-flat">
+                        <span>清除已上传的图片</span>
+                    </button>
+                </div>
+
+                <div class="inputContainer">
+                    <label class="checkboxContainer">
+                        <input is="emby-checkbox" type="checkbox" id="UseCustomOngoingBadge" />
+                        <span>"更新中"角标使用自定义图片</span>
+                    </label>
+                    <input type="file" id="CustomOngoingBadgeFile" accept="image/png,image/webp" />
+                    <div class="fieldDescription" id="CustomOngoingBadgeStatus">尚未上传</div>
+                    <button is="emby-button" type="button" id="ClearCustomOngoingBadge" class="button-flat">
+                        <span>清除已上传的图片</span>
+                    </button>
+                </div>
+
+                <div class="inputContainer">
+                    <label for="TmdbRequestIntervalMs">TMDB 请求间隔(毫秒)</label>
+                    <input is="emby-input" type="number" id="TmdbRequestIntervalMs" min="100" />
+                </div>
+
+                <div class="inputContainer">
+                    <label for="CacheHours">结果缓存时长(小时)</label>
+                    <input is="emby-input" type="number" id="CacheHours" min="1" />
+                    <div class="fieldDescription">
+                        同一部剧在这个时间内不会重复请求 TMDB。
+                    </div>
+                </div>
+
+                <div>
+                    <button is="emby-button" type="submit" class="raised button-submit block">
+                        <span>保存</span>
+                    </button>
+                </div>
+
+                <div class="fieldDescription" style="margin-top:1em;">
+                    保存设置后，去"计划任务"页面找到「扫描剧集完结状态（TMDB）」，
+                    点一次"立即运行"即可对全库做首次检测。
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
